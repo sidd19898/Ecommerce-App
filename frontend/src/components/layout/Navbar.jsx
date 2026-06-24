@@ -45,6 +45,14 @@ export default function Navbar() {
             Cart
           </Button>
 
+          <Button
+  color="inherit"
+  component={Link}
+  to="/wishlist"
+>
+  Wishlist
+</Button>
+
           
   {
   token ? (
