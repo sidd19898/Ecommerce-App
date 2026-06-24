@@ -1,0 +1,189 @@
+const Cart = require("../models/Cart");
+const Order = require("../models/Order");
+const Product = require("../models/Product");
+const User = require("../models/User");
+
+const placeOrder = async (req, res) => {
+
+  try {
+
+    const { addressId } = req.body;
+
+    const cart = await Cart.findOne({
+      user: req.userId
+    }).populate("items.product");
+
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({
+        message: "Cart is empty"
+      });
+    }
+
+    const user = await User.findById(req.userId);
+
+    const address = user.addresses.id(addressId);
+
+    if (!address) {
+      return res.status(404).json({
+        message: "Address not found"
+      });
+    }
+
+    let totalAmount = 0;
+
+    const orderItems = [];
+
+    for (const item of cart.items) {
+
+      const product = item.product;
+
+      if (item.quantity > product.stock) {
+        return res.status(400).json({
+          message: `${product.name} is out of stock`
+        });
+      }
+
+      totalAmount +=
+        product.price * item.quantity;
+
+      orderItems.push({
+        product: product._id,
+        quantity: item.quantity,
+        price: product.price
+      });
+
+      product.stock -= item.quantity;
+
+      await product.save();
+    }
+
+    const order = await Order.create({
+      user: req.userId,
+      items: orderItems,
+      shippingAddress: address,
+      totalAmount
+    });
+
+    cart.items = [];
+
+    await cart.save();
+
+    res.status(201).json(order);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+
+};
+
+const getMyOrders = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const orders =
+      await Order.find({
+        user: req.userId
+      })
+        .sort({ createdAt: -1 });
+
+    res.json(orders);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+
+};
+
+const getOrderById = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const order =
+      await Order.findById(
+        req.params.id
+      )
+        .populate("items.product");
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found"
+      });
+    }
+
+    if (
+      order.user.toString() !==
+      req.userId
+    ) {
+      return res.status(403).json({
+        message: "Access denied"
+      });
+    }
+
+    res.json(order);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+
+};
+
+const updateOrderStatus = async (
+  req,
+  res
+) => {
+
+  try {
+
+    const { status } = req.body;
+
+    const order =
+      await Order.findById(
+        req.params.id
+      );
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found"
+      });
+    }
+
+    order.status = status;
+
+    await order.save();
+
+    res.json(order);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+
+};
+
+module.exports = {
+  placeOrder,
+  getMyOrders,
+  getOrderById,
+  updateOrderStatus
+};
