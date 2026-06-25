@@ -9,7 +9,11 @@ import ShoppingBagOutlinedIcon
 from "@mui/icons-material/ShoppingBagOutlined";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  Link
+} from "react-router-dom";
 
 import { loginUser }
 from "../../api/auth.api";
@@ -31,6 +35,13 @@ export default function Login() {
   const navigate =
     useNavigate();
 
+const location =
+  useLocation();
+
+const from =
+  location.state?.from?.pathname || "/";
+
+
   const { login } =
     useAuth();
 
@@ -50,7 +61,7 @@ export default function Login() {
           data.user
         );
 
-        navigate("/");
+        navigate(from);
 
       } catch (error) {
 
@@ -155,6 +166,24 @@ export default function Login() {
             Login
           </CustomButton>
 
+<Typography
+  sx={{
+    mt: 3,
+    textAlign: "center",
+    color: "text.secondary"
+  }}
+>
+  Don't have an account?{" "}
+  <Link
+    to="/signup"
+    style={{
+      textDecoration: "none",
+      fontWeight: 600
+    }}
+  >
+    Sign Up
+  </Link>
+</Typography>
         </Box>
 
       </Paper>
