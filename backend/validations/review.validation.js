@@ -10,3 +10,7 @@ const reviewSchema = z.object({
   comment: z.string()
     .min(3)
 });
+
+module.exports = {
+  reviewSchema
+};

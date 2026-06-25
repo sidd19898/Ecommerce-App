@@ -39,7 +39,7 @@ export default function Login() {
           password
         });
 
-      login(data.token);
+      login(data.token,data.user);
 
       navigate("/");
 

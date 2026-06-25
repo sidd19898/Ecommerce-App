@@ -26,10 +26,14 @@ const authMiddleware = async (
 
     next();
   } catch (error) {
-    res.status(401).json({
-      message: "Unauthorized",
-    });
-  }
+
+  console.log(error);
+
+  res.status(401).json({
+    message: error.message
+  });
+
+}
 };
 
 module.exports = authMiddleware;

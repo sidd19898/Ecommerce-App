@@ -7,6 +7,9 @@ from "react-router-dom";
 import ProductDetails
 from "../pages/products/ProductDetails";
 
+import Profile
+from "../pages/profile/Profile";
+
 import Login
 from "../pages/auth/Login";
 
@@ -29,6 +32,12 @@ from "./PrivateRoute";
 
 import Wishlist
 from "../pages/wishlist/Wishlist";
+import AdminRoute from "./AdminRoute";
+import AdminProducts from "../pages/admin/AdminProducts";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminOrders from "../pages/admin/AdminOrders";
+
+import ManageAddresses from "../pages/profile/ManageAddresses";
 
 export default function AppRoutes() {
 
@@ -40,6 +49,49 @@ export default function AppRoutes() {
         path="/"
         element={<Home />}
       />
+
+<Route
+  path="/admin"
+  element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/orders"
+  element={
+    <AdminRoute>
+      <AdminOrders />
+    </AdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/products"
+  element={
+    <AdminRoute>
+      <AdminProducts />
+    </AdminRoute>
+  }
+/>
+
+
+<Route
+  path="/manage-addresses"
+  element={
+    <PrivateRoute>
+      <ManageAddresses />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/profile"
+  element={<Profile />}
+/>
+
 
       <Route
         path="/login"
@@ -54,6 +106,9 @@ export default function AppRoutes() {
     </PrivateRoute>
   }
 />
+
+
+
 
       <Route
   path="/product/:id"

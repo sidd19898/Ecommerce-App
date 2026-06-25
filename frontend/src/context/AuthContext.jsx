@@ -13,17 +13,40 @@ export function AuthProvider({
 
   const [token, setToken] =
     useState(
-      localStorage.getItem("token")
+      localStorage.getItem(
+        "token"
+      )
     );
 
-  const login = (jwt) => {
+  const [user, setUser] =
+    useState(
+      JSON.parse(
+        localStorage.getItem(
+          "user"
+        )
+      )
+    );
+
+  const login = (
+    jwt,
+    userData
+  ) => {
 
     localStorage.setItem(
       "token",
       jwt
     );
 
+    localStorage.setItem(
+      "user",
+      JSON.stringify(
+        userData
+      )
+    );
+
     setToken(jwt);
+    setUser(userData);
+
   };
 
   const logout = () => {
@@ -32,21 +55,35 @@ export function AuthProvider({
       "token"
     );
 
+    localStorage.removeItem(
+      "user"
+    );
+
     setToken(null);
+    setUser(null);
+
   };
 
   return (
+
     <AuthContext.Provider
       value={{
         token,
+        user,
         login,
         logout
       }}
     >
+
       {children}
+
     </AuthContext.Provider>
+
   );
+
 }
 
-export const useAuth = () =>
-  useContext(AuthContext);
+export const useAuth =
+  () => useContext(
+    AuthContext
+  );

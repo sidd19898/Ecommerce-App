@@ -14,6 +14,20 @@ import {
   Box
 } from "@mui/material";
 
+import Rating from "@mui/material/Rating";
+
+import {
+  getReviews,
+  createReview
+} from "../../api/review.api";
+
+import {
+  TextField,
+  Card,
+  CardContent
+} from "@mui/material";
+
+
 import {
   addToWishlist
 } from "../../api/wishlist.api";
@@ -47,12 +61,71 @@ export default function ProductDetails() {
   const [loading, setLoading] =
     useState(true);
 
+    const [reviews, setReviews] =
+  useState([]);
+
+const [rating, setRating] =
+  useState(5);
+
+const [comment, setComment] =
+  useState("");
+
+
   useEffect(() => {
+
+    fetchReviews();
 
     fetchProduct();
 
   }, []);
 
+const handleReview =
+  async () => {
+
+    try {
+
+      await createReview({
+        productId: id,
+        rating: Number(rating),
+        comment
+      });
+
+      setComment("");
+      setRating(5);
+
+      fetchReviews();
+
+      alert(
+        "Review added"
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+
+const fetchReviews =
+  async () => {
+
+    try {
+
+      const data =
+        await getReviews(id);
+
+      setReviews(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+  
 const handleWishlist =
   async () => {
 
@@ -191,6 +264,83 @@ const handleAddToCart =
               </CustomButton>
 
             </Box>
+
+            <Typography
+  variant="h5"
+  mt={4}
+>
+  Write Review
+</Typography>
+
+<Rating
+  value={rating}
+  onChange={(
+    event,
+    value
+  ) =>
+    setRating(value)
+  }
+/>
+
+<TextField
+  fullWidth
+  multiline
+  rows={3}
+  label="Comment"
+  value={comment}
+  onChange={(e) =>
+    setComment(
+      e.target.value
+    )
+  }
+  sx={{ mt: 2 }}
+/>
+
+<CustomButton
+  sx={{ mt: 2 }}
+  onClick={handleReview}
+>
+  Submit Review
+</CustomButton>
+
+<Typography
+  variant="h5"
+  mt={4}
+>
+  Reviews
+</Typography>
+
+{
+  reviews.map(
+    (review) => (
+
+      <Card
+        key={review._id}
+        sx={{ mt: 2 }}
+      >
+
+        <CardContent>
+
+          <Rating
+            value={
+              review.rating
+            }
+            readOnly
+          />
+
+          <Typography>
+            {
+              review.comment
+            }
+          </Typography>
+
+        </CardContent>
+
+      </Card>
+
+    )
+  )
+}
 
             <Box mt={2}>
 

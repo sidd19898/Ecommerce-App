@@ -1,24 +1,45 @@
 import api from "./axios";
 
-export const getAddresses =
-  async () => {
+export const getAddresses = async () => {
+  const { data } = await api.get(
+    "/users/address"
+  );
 
-    const response =
-      await api.get(
-        "/users/address"
-      );
+  return data;
+};
 
-    return response.data;
-  };
+export const addAddress = async (
+  addressData
+) => {
 
-export const addAddress =
-  async (address) => {
+  const { data } = await api.post(
+    "/users/address",
+    addressData
+  );
 
-    const response =
-      await api.post(
-        "/users/address",
-        address
-      );
+  return data;
+};
 
-    return response.data;
-  };
+export const updateAddress = async (
+  id,
+  addressData
+) => {
+
+  const { data } = await api.put(
+    `/users/address/${id}`,
+    addressData
+  );
+
+  return data;
+};
+
+export const deleteAddress = async (
+  id
+) => {
+
+  const { data } = await api.delete(
+    `/users/address/${id}`
+  );
+
+  return data;
+};
