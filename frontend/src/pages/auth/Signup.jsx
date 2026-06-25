@@ -35,7 +35,10 @@ export default function Signup() {
         password
       });
 
-      login(data.token);
+      login(
+  data.token,
+  data.user
+);
 
       navigate("/");
 
