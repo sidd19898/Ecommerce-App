@@ -1,16 +1,25 @@
 import api from "./axios";
 
-export const getProducts =
-  async (params = {}) => {
+export const getProducts = async ({
+  search = "",
+  category = "",
+  page = 1
+} = {}) => {
 
-    const response =
-      await api.get(
-        "/products",
-        { params }
-      );
+  const { data } =
+    await api.get(
+      "/products",
+      {
+        params: {
+          search,
+          category,
+          page
+        }
+      }
+    );
 
-    return response.data;
-  };
+  return data;
+};
 
   export const getProductById =
   async (id) => {

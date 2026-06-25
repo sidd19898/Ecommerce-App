@@ -18,6 +18,9 @@ import {
   MenuItem
 } from "@mui/material";
 
+
+import Pagination from "@mui/material/Pagination";
+
 import Layout
 from "../../components/layout/Layout";
 
@@ -40,6 +43,9 @@ import {
 } from "../../api/upload.api";
 
 export default function AdminProducts() {
+
+  const [page, setPage] = useState(1);
+const [pages, setPages] = useState(1);
 
     const [editingId,
   setEditingId] =
@@ -81,12 +87,14 @@ const [uploading,
   setUploading] =
   useState(false);
 
+
   useEffect(() => {
+  fetchProducts();
+}, [page]);
 
-    fetchProducts();
-    fetchCategories();
-
-  }, []);
+useEffect(() => {
+  fetchCategories();
+}, []);
 
 
 const handleEdit =
@@ -217,13 +225,12 @@ const handleImageUpload =
 
       try {
 
-        const data =
-          await getProducts();
+const data = await getProducts({
+  page
+});
 
-        setProducts(
-          data.products
-        );
-
+setProducts(data.products);
+setPages(data.pages);
       } catch (error) {
 
         console.log(error);
@@ -664,6 +671,24 @@ const handleImageUpload =
           }
 
         </Grid>
+
+<Box
+  sx={{
+    display: "flex",
+    justifyContent: "center",
+    mt: 4
+  }}
+>
+  <Pagination
+    count={pages}
+    page={page}
+    onChange={(e, value) =>
+      setPage(value)
+    }
+    color="primary"
+  />
+</Box>
+
 
       </Container>
 
