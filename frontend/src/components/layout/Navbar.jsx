@@ -11,10 +11,17 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  Divider
 } from "@mui/material";
 
+import {
+  Link,
+  useLocation
+} from "react-router-dom";
+
 import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import HomeIcon from "@mui/icons-material/Home";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -24,11 +31,13 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 
-import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
-  const { token, logout } = useAuth();
+
+  const { token, user, logout } = useAuth();
+
+  const location = useLocation();
 
   const [open, setOpen] = useState(false);
 
@@ -57,23 +66,25 @@ export default function Navbar() {
       text: "Wishlist",
       link: "/wishlist",
       icon: <FavoriteIcon />
-    },
-    {
+    }
+  ];
+
+  if (user?.role === "admin") {
+    menuItems.push({
       text: "Admin",
       link: "/admin",
       icon: <AdminPanelSettingsIcon />
-    }
-  ];
+    });
+  }
 
   return (
     <>
       <AppBar
         position="sticky"
-        elevation={0}
+        elevation={3}
         sx={{
-          backdropFilter: "blur(10px)",
-          background: "rgba(25,118,210,.95)",
-          borderBottom: "1px solid rgba(255,255,255,.15)"
+          background:
+            "linear-gradient(90deg,#1565c0,#1976d2)"
         }}
       >
         <Toolbar>
@@ -100,16 +111,21 @@ export default function Navbar() {
               gap: 1
             }}
           >
+
             {menuItems.map((item) => (
+
               <Button
                 key={item.text}
                 component={Link}
                 to={item.link}
                 color="inherit"
                 sx={{
-                  borderRadius: 5,
                   px: 2,
-                  transition: ".25s",
+                  borderRadius: 5,
+                  bgcolor:
+                    location.pathname === item.link
+                      ? "rgba(255,255,255,.18)"
+                      : "transparent",
                   "&:hover": {
                     bgcolor: "rgba(255,255,255,.18)"
                   }
@@ -117,15 +133,16 @@ export default function Navbar() {
               >
                 {item.text}
               </Button>
+
             ))}
 
             {token ? (
+
               <Button
                 color="inherit"
                 onClick={logout}
                 sx={{
                   borderRadius: 5,
-                  px: 2,
                   "&:hover": {
                     bgcolor: "rgba(255,255,255,.18)"
                   }
@@ -133,14 +150,15 @@ export default function Navbar() {
               >
                 Logout
               </Button>
+
             ) : (
+
               <Button
                 component={Link}
                 to="/login"
                 color="inherit"
                 sx={{
                   borderRadius: 5,
-                  px: 2,
                   "&:hover": {
                     bgcolor: "rgba(255,255,255,.18)"
                   }
@@ -148,7 +166,9 @@ export default function Navbar() {
               >
                 Login
               </Button>
+
             )}
+
           </Box>
 
           {/* Mobile */}
@@ -159,11 +179,7 @@ export default function Navbar() {
                 xs: "flex",
                 md: "none"
               },
-              color: "white",
-              bgcolor: "rgba(255,255,255,.12)",
-              "&:hover": {
-                bgcolor: "rgba(255,255,255,.25)"
-              }
+              color: "white"
             }}
             onClick={() => setOpen(true)}
           >
@@ -176,129 +192,228 @@ export default function Navbar() {
       {/* Drawer */}
 
       <Drawer
-        anchor="right"
+        anchor="left"
         open={open}
         onClose={() => setOpen(false)}
         PaperProps={{
           sx: {
-            width: 270,
-            background:
-              "linear-gradient(180deg,#1976d2,#0d47a1)",
-            color: "white"
+            width: 310,
+            background: "#fff",
+            borderTopRightRadius: 24,
+            borderBottomRightRadius: 24,
+            overflow: "hidden"
           }
         }}
       >
+
+        {/* Header */}
+
         <Box
           sx={{
+            background:
+              "linear-gradient(135deg,#1565c0,#42a5f5)",
             p: 3,
-            textAlign: "center",
-            borderBottom:
-              "1px solid rgba(255,255,255,.2)"
+            color: "white"
           }}
         >
-          <Typography
-            variant="h5"
-            fontWeight={700}
-          >
-            🛍️ ShopEase
-          </Typography>
 
-          <Typography
-            variant="body2"
-            sx={{
-              opacity: .8,
-              mt: 1
-            }}
+          <Box
+            display="flex"
+            alignItems="center"
+            gap={2}
           >
-            Welcome
-          </Typography>
+
+            <Box
+              sx={{
+                width: 64,
+                height: 64,
+                bgcolor: "white",
+                borderRadius: 3,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <ShoppingBagOutlinedIcon
+                sx={{
+                  color: "#1976d2",
+                  fontSize: 38
+                }}
+              />
+            </Box>
+
+            <Box>
+
+              <Typography
+                variant="h5"
+                fontWeight={700}
+              >
+                ShopEase
+              </Typography>
+
+              <Typography
+                sx={{
+                  opacity: .9
+                }}
+              >
+                Welcome 👋
+              </Typography>
+
+            </Box>
+
+          </Box>
+
         </Box>
 
-        <List>
+        {/* Navigation */}
 
-          {menuItems.map((item) => (
+        <Box
+          sx={{
+            py: 2,
+            flex: 1
+          }}
+        >
 
-            <ListItem
-              key={item.text}
-              disablePadding
-            >
-              <ListItemButton
-                component={Link}
-                to={item.link}
-                onClick={() => setOpen(false)}
-                sx={{
-                  borderRadius: 2,
-                  mx: 1,
-                  my: .5,
-                  "&:hover": {
-                    bgcolor:
-                      "rgba(255,255,255,.12)"
-                  }
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    color: "white",
-                    minWidth: 40
-                  }}
+          <List>
+
+            {menuItems.map((item) => {
+
+              const active =
+                location.pathname === item.link;
+
+              return (
+
+                <ListItem
+                  key={item.text}
+                  disablePadding
                 >
-                  {item.icon}
-                </ListItemIcon>
 
-                <ListItemText
-                  primary={item.text}
-                />
-              </ListItemButton>
+                  <ListItemButton
 
-            </ListItem>
+                    component={Link}
+                    to={item.link}
 
-          ))}
+                    onClick={() =>
+                      setOpen(false)
+                    }
 
-          <ListItem disablePadding>
+                    sx={{
+                      mx: 2,
+                      my: .5,
+                      borderRadius: 3,
 
-            <ListItemButton
-              component={token ? "button" : Link}
-              to={!token ? "/login" : undefined}
+                      background: active
+                        ? "#eef4ff"
+                        : "transparent",
+
+                      borderLeft: active
+                        ? "4px solid #1976d2"
+                        : "4px solid transparent",
+
+                      "&:hover": {
+                        background: "#eef4ff"
+                      }
+                    }}
+                  >
+
+                    <ListItemIcon>
+
+                      <Box
+                        sx={{
+                          width: 44,
+                          height: 44,
+                          bgcolor: "#f5f7fb",
+                          borderRadius: 2,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        {item.icon}
+                      </Box>
+
+                    </ListItemIcon>
+
+                    <ListItemText
+                      primary={item.text}
+                    />
+
+                  </ListItemButton>
+
+                </ListItem>
+
+              );
+
+            })}
+
+          </List>
+
+        </Box>
+
+        <Divider />
+
+        {/* Bottom */}
+
+        <Box
+          sx={{
+            p: 2
+          }}
+        >
+
+          {token ? (
+
+            <Button
+
+              fullWidth
+
+              color="error"
+
+              variant="outlined"
+
+              startIcon={<LogoutIcon />}
+
               onClick={() => {
-                if (token) logout();
+                logout();
                 setOpen(false);
               }}
+
               sx={{
-                borderRadius: 2,
-                mx: 1,
-                my: .5,
-                "&:hover": {
-                  bgcolor:
-                    "rgba(255,255,255,.12)"
-                }
+                borderRadius: 3,
+                height: 54
               }}
             >
-              <ListItemIcon
-                sx={{
-                  color: "white",
-                  minWidth: 40
-                }}
-              >
-                {token ? (
-                  <LogoutIcon />
-                ) : (
-                  <LoginIcon />
-                )}
-              </ListItemIcon>
+              Logout
+            </Button>
 
-              <ListItemText
-                primary={
-                  token
-                    ? "Logout"
-                    : "Login"
-                }
-              />
+          ) : (
 
-            </ListItemButton>
+            <Button
 
-          </ListItem>
+              fullWidth
 
-        </List>
+              variant="contained"
+
+              component={Link}
+
+              to="/login"
+
+              startIcon={<LoginIcon />}
+
+              onClick={() =>
+                setOpen(false)
+              }
+
+              sx={{
+                borderRadius: 3,
+                height: 54
+              }}
+            >
+              Login
+            </Button>
+
+          )}
+
+        </Box>
 
       </Drawer>
     </>
