@@ -426,41 +426,43 @@ const handleImageUpload =
               sx={{ mb: 2 }}
             />
 
-            <Button
-  component="label"
-  variant="outlined"
-  sx={{ mb: 2 }}
->
+       
+       
+       
+       
+       
+       
+       
+       
+ <Box sx={{ mb: 2 }}>
 
-  Upload Image
+  <Button
+    component="label"
+    variant="outlined"
+  >
+    Upload Image
 
-  <input
-    hidden
-    type="file"
-    accept="image/*"
-    onChange={
-      handleImageUpload
-    }
-  />
+    <input
+      hidden
+      type="file"
+      accept="image/*"
+      onChange={handleImageUpload}
+    />
+  </Button>
 
-</Button>
-
+</Box>
 
 {
   uploading && (
-
-    <Typography>
+    <Typography sx={{ mb: 2 }}>
       Uploading...
     </Typography>
-
   )
 }
 
 {
   image && (
-
-    <Box mb={2}>
-
+    <Box sx={{ mb: 2 }}>
       <img
         src={image}
         alt="Preview"
@@ -469,37 +471,45 @@ const handleImageUpload =
           borderRadius: 8
         }}
       />
-
     </Box>
-
   )
 }
-{
-  editingId ? (
 
-    <Button
-      variant="contained"
-      color="warning"
-      onClick={
-        handleUpdate
-      }
-    >
-      Update Product
-    </Button>
+<Box
+  sx={{
+    display: "flex",
+    gap: 2,
+    mt: 2
+  }}
+>
 
-  ) : (
+  {
+    editingId ? (
+      <Button
+        variant="contained"
+        color="warning"
+        sx={{ minWidth: 180 }}
+        onClick={handleUpdate}
+      >
+        Update Product
+      </Button>
+    ) : (
+      <Button
+        variant="contained"
+        sx={{ minWidth: 180 }}
+        onClick={handleCreate}
+      >
+        Create Product
+      </Button>
+    )
+  }
 
-    <Button
-      variant="contained"
-      onClick={
-        handleCreate
-      }
-    >
-      Create Product
-    </Button>
+</Box>
 
-  )
-}
+
+
+
+
 
           </CardContent>
 
@@ -530,26 +540,51 @@ const handleImageUpload =
                   }}
                 >
 
-                  <Card>
-
-                    <CardContent>
-
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        gap={1}
-                      >
-
-                        <img
-  src={product.images?.[0]}
-  alt={product.name}
-  style={{
-    width: "100%",
-    height: "200px",
-    objectFit: "contain",
-    backgroundColor: "#f5f5f5"
+                  <Card
+  sx={{
+    borderRadius: 3,
+    boxShadow: 2,
+    height: "100%"
   }}
-/>
+>
+
+                    <CardContent
+  sx={{
+    display: "flex",
+    flexDirection: "column",
+    height: "100%"
+  }}
+>
+
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      flex: 1
+    }}
+  >
+
+                       <Box
+  sx={{
+    height: 220,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f8f9fa",
+    borderRadius: 2,
+    mb: 2
+  }}
+>
+  <img
+    src={product.images?.[0]}
+    alt={product.name}
+    style={{
+      maxWidth: "100%",
+      maxHeight: "100%",
+      objectFit: "contain"
+    }}
+  />
+</Box>
 
                         <Typography
                           variant="h6"
@@ -582,30 +617,40 @@ const handleImageUpload =
                           }
                         </Typography>
 
-
-                        <Button
-  variant="contained"
-  onClick={() =>
-    handleEdit(
-      product
-    )
-  }
+<Box
+  sx={{
+    display: "flex",
+    gap: 1.5,
+    mt: 2
+  }}
 >
-  Edit
-</Button>
+  <Button
+    variant="contained"
+    sx={{
+      flex: 1,
+      borderRadius: 2
+    }}
+    onClick={() =>
+      handleEdit(product)
+    }
+  >
+    Edit
+  </Button>
 
-                        <Button
-                          color="error"
-                          variant="outlined"
-                          onClick={() =>
-                            handleDelete(
-                              product._id
-                            )
-                          }
-                        >
-                          Delete
-                        </Button>
-
+  <Button
+    variant="outlined"
+    color="error"
+    sx={{
+      flex: 1,
+      borderRadius: 2
+    }}
+    onClick={() =>
+      handleDelete(product._id)
+    }
+  >
+    Delete
+  </Button>
+</Box>
                       </Box>
 
                     </CardContent>

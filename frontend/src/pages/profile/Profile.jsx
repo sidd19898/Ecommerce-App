@@ -8,12 +8,16 @@ import {
   Paper,
   Typography,
   TextField,
-  Button
+  Button,
+  Box
 } from "@mui/material";
+
+import { useNavigate }
+from "react-router-dom";
 
 import Layout
 from "../../components/layout/Layout";
-import {useNavigate} from "react-router-dom";
+
 import {
   getProfile,
   updateProfile
@@ -21,7 +25,9 @@ import {
 
 export default function Profile() {
 
-    const navigate = useNavigate();
+  const navigate =
+    useNavigate();
+
   const [name, setName] =
     useState("");
 
@@ -80,14 +86,24 @@ export default function Profile() {
 
       <Container
         maxWidth="sm"
-        sx={{ mt: 4 }}
+        sx={{
+          mt: 6,
+          mb: 6
+        }}
       >
 
-        <Paper sx={{ p: 3 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            borderRadius: 3
+          }}
+        >
 
           <Typography
-            variant="h5"
-            mb={2}
+            variant="h4"
+            fontWeight={600}
+            gutterBottom
           >
             My Profile
           </Typography>
@@ -112,24 +128,50 @@ export default function Profile() {
             value={email}
           />
 
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleUpdate}
+          <Box
+            sx={{
+              mt: 3,
+              display: "flex",
+              gap: 2,
+              flexWrap: "wrap"
+            }}
           >
-            Update Profile
-          </Button>
 
-          
-<Button
-  variant="outlined"
-  onClick={() =>
-    navigate("/manage-addresses")
-  }
->
-  Manage Addresses
-</Button>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                flex: {
+                  xs: "1 1 100%",
+                  sm: "1"
+                }
+              }}
+              onClick={
+                handleUpdate
+              }
+            >
+              Update Profile
+            </Button>
+
+            <Button
+              variant="outlined"
+              size="large"
+              sx={{
+                flex: {
+                  xs: "1 1 100%",
+                  sm: "1"
+                }
+              }}
+              onClick={() =>
+                navigate(
+                  "/manage-addresses"
+                )
+              }
+            >
+              Manage Addresses
+            </Button>
+
+          </Box>
 
         </Paper>
 

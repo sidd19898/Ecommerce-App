@@ -44,9 +44,9 @@ export default function Wishlist() {
         const data =
           await getWishlist();
 
-          console.log(data);
-
-        setProducts(data.products);
+        setProducts(
+          data.products
+        );
 
       } catch (error) {
 
@@ -59,27 +59,43 @@ export default function Wishlist() {
   const handleRemove =
     async (productId) => {
 
-      await removeFromWishlist(
-        productId
-      );
+      try {
 
-      fetchWishlist();
+        await removeFromWishlist(
+          productId
+        );
+
+        fetchWishlist();
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
 
     };
 
   const handleMoveToCart =
     async (productId) => {
 
-      await addToCart(
-        productId,
-        1
-      );
+      try {
 
-      await removeFromWishlist(
-        productId
-      );
+        await addToCart(
+          productId,
+          1
+        );
 
-      fetchWishlist();
+        await removeFromWishlist(
+          productId
+        );
+
+        fetchWishlist();
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
 
     };
 
@@ -88,89 +104,158 @@ export default function Wishlist() {
     <Layout>
 
       <Container
-        sx={{ mt: 4 }}
+        maxWidth="lg"
+        sx={{
+          mt: 4,
+          mb: 6
+        }}
       >
 
         <Typography
           variant="h4"
+          fontWeight={700}
           mb={3}
         >
           Wishlist
         </Typography>
 
         {
-          products.map(
-            product => (
+          products.length === 0 ? (
 
-              <Card
-                key={product._id}
-                sx={{ mb: 2 }}
+            <Card
+              sx={{
+                p: 4,
+                borderRadius: 3
+              }}
+            >
+
+              <Typography
+                variant="h6"
+                align="center"
               >
+                Your wishlist is empty.
+              </Typography>
 
-                <CardContent>
+            </Card>
 
-                  <Box
-                    display="flex"
-                    gap={2}
-                    alignItems="center"
-                  >
+          ) : (
 
-                    <img
-                      src={
-                        product.images?.[0]
-                      }
-                      alt={
-                        product.name
-                      }
-                      width="100"
-                    />
+            products.map(
+              product => (
 
-                    <Box flex={1}>
+                <Card
+                  key={product._id}
+                  sx={{
+                    mb: 3,
+                    borderRadius: 3,
+                    boxShadow: 2
+                  }}
+                >
 
-                      <Typography>
-                        {
+                  <CardContent>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 3,
+                        alignItems: "center",
+                        flexWrap: {
+                          xs: "wrap",
+                          md: "nowrap"
+                        }
+                      }}
+                    >
+
+                      <Box
+                        component="img"
+                        src={
+                          product.images?.[0]
+                        }
+                        alt={
                           product.name
                         }
-                      </Typography>
+                        sx={{
+                          width: 140,
+                          height: 140,
+                          objectFit:
+                            "contain",
+                          borderRadius: 2
+                        }}
+                      />
 
-                      <Typography>
-                        ₹
-                        {
-                          product.price
-                        }
-                      </Typography>
+                      <Box
+                        sx={{
+                          flex: 1
+                        }}
+                      >
+
+                        <Typography
+                          variant="h5"
+                          fontWeight={600}
+                        >
+                          {
+                            product.name
+                          }
+                        </Typography>
+
+                        <Typography
+                          variant="h6"
+                          color="primary"
+                          sx={{
+                            mt: 1
+                          }}
+                        >
+                          ₹
+                          {
+                            product.price
+                          }
+                        </Typography>
+
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 2,
+                          flexWrap:
+                            "wrap"
+                        }}
+                      >
+
+                        <Button
+                          variant="contained"
+                          onClick={() =>
+                            handleMoveToCart(
+                              product._id
+                            )
+                          }
+                        >
+                          Move To Cart
+                        </Button>
+
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() =>
+                            handleRemove(
+                              product._id
+                            )
+                          }
+                        >
+                          Remove
+                        </Button>
+
+                      </Box>
 
                     </Box>
 
-                    <Button
-                      variant="contained"
-                      onClick={() =>
-                        handleMoveToCart(
-                          product._id
-                        )
-                      }
-                    >
-                      Move To Cart
-                    </Button>
+                  </CardContent>
 
-                    <Button
-                      color="error"
-                      onClick={() =>
-                        handleRemove(
-                          product._id
-                        )
-                      }
-                    >
-                      Remove
-                    </Button>
+                </Card>
 
-                  </Box>
-
-                </CardContent>
-
-              </Card>
-
+              )
             )
+
           )
         }
 

@@ -33,13 +33,16 @@ export default function ProductCard({
 >
 
       <CardMedia
-        component="img"
-        height="200"
-        image={
-          product.images?.[0] ||
-          "https://via.placeholder.com/300"
-        }
-      />
+  component="img"
+  image={product.images?.[0]}
+  alt={product.name}
+  sx={{
+    height: 220,
+    objectFit: "contain",
+    p: 2,
+    backgroundColor: "#fff"
+  }}
+/>
 
       <CardContent>
 

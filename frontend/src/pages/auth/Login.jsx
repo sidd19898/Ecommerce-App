@@ -5,6 +5,9 @@ import {
   Typography
 } from "@mui/material";
 
+import ShoppingBagOutlinedIcon
+from "@mui/icons-material/ShoppingBagOutlined";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -25,66 +28,109 @@ export default function Login() {
   const [password, setPassword] =
     useState("");
 
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const { login } = useAuth();
+  const { login } =
+    useAuth();
 
-  const handleSubmit = async () => {
+  const handleSubmit =
+    async () => {
 
-    try {
+      try {
 
-      const data =
-        await loginUser({
-          email,
-          password
-        });
+        const data =
+          await loginUser({
+            email,
+            password
+          });
 
-      login(data.token,data.user);
+        login(
+          data.token,
+          data.user
+        );
 
-      navigate("/");
+        navigate("/");
 
-    } catch (error) {
+      } catch (error) {
 
-      alert(
-        error.response?.data?.message
-      );
+        alert(
+          error.response?.data?.message
+        );
 
-    }
+      }
 
-  };
+    };
 
   return (
 
     <Box
-      display="flex"
-      justifyContent="center"
-      mt={8}
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background:
+          "linear-gradient(135deg, #f5f7fa 0%, #e4ecfb 100%)",
+        px: 2
+      }}
     >
 
       <Paper
+        elevation={6}
         sx={{
-          p: 3,
-          width: {
-            xs: "90%",
-            sm: 400
-          }
-        }}
+  p: {
+    xs: 3,
+    sm: 5
+  },
+  width: "100%",
+  maxWidth: 500,
+  borderRadius: 5
+}}
       >
+<Box
+  sx={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    mb: 4
+  }}
+>
 
-        <Typography
-          variant="h5"
-          mb={2}
-        >
-          Login
-        </Typography>
+  <ShoppingBagOutlinedIcon
+    color="primary"
+    sx={{
+      fontSize: 56,
+      mb: 2
+    }}
+  />
 
+  <Typography
+    variant="h4"
+    fontWeight={700}
+    textAlign="center"
+  >
+    Welcome Back
+  </Typography>
+
+  <Typography
+    color="text.secondary"
+    textAlign="center"
+    sx={{ mt: 1 }}
+  >
+    Login to your account
+  </Typography>
+
+</Box>
         <TextField
           fullWidth
           label="Email"
           margin="normal"
           value={email}
           onChange={(e) =>
-            setEmail(e.target.value)
+            setEmail(
+              e.target.value
+            )
           }
         />
 
@@ -95,19 +141,26 @@ export default function Login() {
           margin="normal"
           value={password}
           onChange={(e) =>
-            setPassword(e.target.value)
+            setPassword(
+              e.target.value
+            )
           }
         />
 
-        <CustomButton
-          onClick={handleSubmit}
-        >
-          Login
-        </CustomButton>
+        <Box sx={{ mt: 3 }}>
+
+          <CustomButton
+            onClick={handleSubmit}
+          >
+            Login
+          </CustomButton>
+
+        </Box>
 
       </Paper>
 
     </Box>
 
   );
+
 }

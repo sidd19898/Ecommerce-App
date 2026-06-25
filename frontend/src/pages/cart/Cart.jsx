@@ -119,141 +119,178 @@ const navigate = useNavigate();
 
             <>
               {
-                cart.items.map(
-                  (item) => (
+               
+               
 
-                    <Card
-                      key={
-                        item.product._id
-                      }
-                      sx={{
-                        mb: 2
-                      }}
-                    >
 
-                      <CardContent>
 
-                        <Box
-                          display="flex"
-                          gap={2}
-                          alignItems="center"
-                          flexWrap="wrap"
-                        >
 
-                          <img
-                            src={
-                              item.product
-                                .images?.[0]
-                            }
-                            alt={
-                              item.product
-                                .name
-                            }
-                            width="100"
-                          />
 
-                          <Box
-                            flex={1}
-                          >
+               
+  cart.items.map((item) => (
 
-                            <Typography
-                              variant="h6"
-                            >
-                              {
-                                item.product
-                                  .name
-                              }
-                            </Typography>
+    <Card
+      key={item.product._id}
+      sx={{
+        mb: 3,
+        p: 2,
+        borderRadius: 3,
+        boxShadow: 2
+      }}
+    >
 
-                            <Typography>
-                              ₹
-                              {
-                                item.product
-                                  .price
-                              }
-                            </Typography>
+      <CardContent>
 
-                          </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 3,
+            alignItems: "center",
+            flexWrap: {
+              xs: "wrap",
+              md: "nowrap"
+            }
+          }}
+        >
 
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                          >
+          <Box
+            component="img"
+            src={item.product.images?.[0]}
+            alt={item.product.name}
+            sx={{
+              width: 140,
+              height: 140,
+              objectFit: "contain",
+              borderRadius: 2
+            }}
+          />
 
-                            <IconButton
-                              onClick={() =>
-                                handleQuantityChange(
-                                  item
-                                    .product
-                                    ._id,
-                                  item.quantity -
-                                    1
-                                )
-                              }
-                            >
-                              <RemoveIcon />
-                            </IconButton>
+          <Box sx={{ flex: 1 }}>
 
-                            <Typography>
-                              {
-                                item.quantity
-                              }
-                            </Typography>
+            <Typography
+              variant="h5"
+              fontWeight={600}
+            >
+              {item.product.name}
+            </Typography>
 
-                            <IconButton
-                              onClick={() =>
-                                handleQuantityChange(
-                                  item
-                                    .product
-                                    ._id,
-                                  item.quantity +
-                                    1
-                                )
-                              }
-                            >
-                              <AddIcon />
-                            </IconButton>
+            <Typography
+              variant="h6"
+              color="primary"
+              sx={{ mt: 1 }}
+            >
+              ₹ {item.product.price}
+            </Typography>
 
-                          </Box>
+          </Box>
 
-                          <Button
-                            color="error"
-                            onClick={() =>
-                              handleRemove(
-                                item.product
-                                  ._id
-                              )
-                            }
-                          >
-                            Remove
-                          </Button>
-                
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1
+            }}
+          >
 
-                        </Box>
-
-                      </CardContent>
-
-                    </Card>
-
-                  )
+            <IconButton
+              onClick={() =>
+                handleQuantityChange(
+                  item.product._id,
+                  item.quantity - 1
                 )
               }
+            >
+              <RemoveIcon />
+            </IconButton>
 
-              <Typography
-                variant="h5"
-                mt={3}
-              >
-                Total: ₹ {total}
-              </Typography>
+            <Typography
+              variant="h6"
+            >
+              {item.quantity}
+            </Typography>
 
-              <Box mt={2}>
+            <IconButton
+              onClick={() =>
+                handleQuantityChange(
+                  item.product._id,
+                  item.quantity + 1
+                )
+              }
+            >
+              <AddIcon />
+            </IconButton>
+
+          </Box>
+
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() =>
+              handleRemove(
+                item.product._id
+              )
+            }
+          >
+            Remove
+          </Button>
+
+        </Box>
+
+      </CardContent>
+
+    </Card>
+
+  ))
+
+
+
+
+
+
+
+}
+
+
+
+
+           <Box
+  sx={{
+    mt: 4,
+    p: 3,
+    borderRadius: 3,
+    bgcolor: "#fff",
+    boxShadow: 2,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 2
+  }}
+>
+
+  <Typography
+    variant="h4"
+    fontWeight={700}
+  >
+    Total: ₹ {total}
+  </Typography>
+
   <Button
     variant="contained"
-    onClick={() => navigate("/address")}
+    size="large"
+    onClick={() =>
+      navigate("/address")
+    }
   >
-    Checkout
+    Proceed To Checkout
   </Button>
+
 </Box>
+
+
+
+
+
 
             </>
 

@@ -53,6 +53,22 @@ export default function Navbar() {
   Profile
 </Button>
 
+<Button
+  color="inherit"
+  component={Link}
+  to="/orders"
+>
+  Orders
+</Button>
+
+<Button
+  color="inherit"
+  component={Link}
+  to="/admin"
+>
+  Admin
+</Button>
+
           <Button
   color="inherit"
   component={Link}

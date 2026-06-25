@@ -5,7 +5,8 @@ import {
 
 import {
   Container,
-  Typography
+  Typography,
+  Box
 } from "@mui/material";
 
 import SearchBar
@@ -32,8 +33,8 @@ export default function Home() {
   const [loading, setLoading] =
     useState(true);
 
-    const [search, setSearch] =
-  useState("");
+  const [search, setSearch] =
+    useState("");
 
   useEffect(() => {
 
@@ -46,12 +47,16 @@ export default function Home() {
 
       try {
 
-        const data =
-  await getProducts({
-    search
-  });
+        setLoading(true);
 
-        setProducts(data.products);
+        const data =
+          await getProducts({
+            search
+          });
+
+        setProducts(
+          data.products
+        );
 
       } catch (error) {
 
@@ -70,35 +75,47 @@ export default function Home() {
     <Layout>
 
       <Container
-        sx={{ mt: 3 }}
+        maxWidth="lg"
+        sx={{ mt: 4 }}
       >
 
         <Typography
           variant="h4"
-          mb={3}
+          sx={{
+            mb: 3,
+            fontWeight: 600
+          }}
         >
           Products
         </Typography>
-        <SearchBar
-  value={search}
-  onChange={setSearch}
-/>
 
-        {
-          loading
-            ? <Loader />
-            : (
-              <ProductGrid
-                products={
-                  products
-                }
-              />
-            )
-        }
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+        />
+
+        <Box sx={{ mt: 3 }}>
+
+          {
+            loading
+              ? (
+                <Loader />
+              )
+              : (
+                <ProductGrid
+                  products={
+                    products
+                  }
+                />
+              )
+          }
+
+        </Box>
 
       </Container>
 
     </Layout>
 
   );
+
 }

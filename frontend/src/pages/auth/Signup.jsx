@@ -5,6 +5,8 @@ import {
   Typography
 } from "@mui/material";
 
+import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -16,11 +18,8 @@ import CustomButton from "../../components/common/CustomButton";
 export default function Signup() {
 
   const [name, setName] = useState("");
-
   const [email, setEmail] = useState("");
-
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
@@ -30,12 +29,11 @@ export default function Signup() {
 
     try {
 
-      const data =
-        await registerUser({
-          name,
-          email,
-          password
-        });
+      const data = await registerUser({
+        name,
+        email,
+        password
+      });
 
       login(data.token);
 
@@ -55,27 +53,64 @@ export default function Signup() {
   return (
 
     <Box
-      display="flex"
-      justifyContent="center"
-      mt={8}
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background:
+          "linear-gradient(135deg, #f5f7fa 0%, #dfe9f3 100%)",
+        px: 2
+      }}
     >
 
       <Paper
+        elevation={8}
         sx={{
-          p: 3,
-          width: {
-            xs: "90%",
-            sm: 400
-          }
+          width: "100%",
+          maxWidth: 500,
+          p: {
+            xs: 3,
+            sm: 5
+          },
+          borderRadius: 5
         }}
       >
 
-        <Typography
-          variant="h5"
-          mb={2}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mb: 4
+          }}
         >
-          Signup
-        </Typography>
+
+          <PersonAddAlt1OutlinedIcon
+            color="primary"
+            sx={{
+              fontSize: 56,
+              mb: 2
+            }}
+          />
+
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            textAlign="center"
+          >
+            Create Account
+          </Typography>
+
+          <Typography
+            color="text.secondary"
+            textAlign="center"
+            sx={{ mt: 1 }}
+          >
+            Join our store and start shopping
+          </Typography>
+
+        </Box>
 
         <TextField
           fullWidth
@@ -108,16 +143,19 @@ export default function Signup() {
           }
         />
 
-        <CustomButton
-          onClick={handleSubmit}
-          sx={{ mt: 2 }}
-        >
-          Signup
-        </CustomButton>
+        <Box sx={{ mt: 4 }}>
+
+          <CustomButton
+            onClick={handleSubmit}
+          >
+            Sign Up
+          </CustomButton>
+
+        </Box>
 
         <Typography
-          mt={2}
           textAlign="center"
+          sx={{ mt: 3 }}
         >
           Already have an account?{" "}
           <Link to="/login">
@@ -130,4 +168,5 @@ export default function Signup() {
     </Box>
 
   );
+
 }

@@ -36,7 +36,8 @@ import AdminRoute from "./AdminRoute";
 import AdminProducts from "../pages/admin/AdminProducts";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminOrders from "../pages/admin/AdminOrders";
-
+import AdminCategories
+from "../pages/admin/AdminCategories";
 import ManageAddresses from "../pages/profile/ManageAddresses";
 
 export default function AppRoutes() {
@@ -55,6 +56,15 @@ export default function AppRoutes() {
   element={
     <AdminRoute>
       <AdminDashboard />
+    </AdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/categories"
+  element={
+    <AdminRoute>
+      <AdminCategories />
     </AdminRoute>
   }
 />

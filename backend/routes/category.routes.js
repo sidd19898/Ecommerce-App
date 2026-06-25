@@ -2,7 +2,10 @@ const express = require("express");
 
 const {
   createCategory,
-  getCategories
+  getCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory
 } = require("../controllers/category.controller");
 
 const authMiddleware = require("../middleware/auth.middleware");
@@ -17,6 +20,25 @@ const {
 const router = express.Router();
 
 router.get("/", getCategories);
+
+router.get("/:id", getCategoryById);
+
+router.put(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  validate(categorySchema),
+  updateCategory
+);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  deleteCategory
+);
+
+
 
 router.post(
   "/",
