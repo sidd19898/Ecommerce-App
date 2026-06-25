@@ -103,7 +103,7 @@ const getReviews = async (
           req.params.productId
       }).populate(
         "user",
-        "name"
+        "name _id"
       );
 
     res.json(reviews);

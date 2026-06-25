@@ -11,7 +11,8 @@ import {
   Container,
   Grid,
   Typography,
-  Box
+  Box,
+  Button
 } from "@mui/material";
 
 import Rating from "@mui/material/Rating";
@@ -50,10 +51,22 @@ import {
   getProductById
 } from "../../api/product.api";
 
+import {
+  useAuth
+} from "../../context/AuthContext";
+
+import {
+  updateReview,
+  deleteReview
+} from "../../api/review.api";
+
 export default function ProductDetails() {
 
   const { id } =
     useParams();
+
+    const { user } =
+  useAuth();
 
   const [product, setProduct] =
     useState(null);
@@ -70,6 +83,11 @@ const [rating, setRating] =
 const [comment, setComment] =
   useState("");
 
+  const [
+  editingReviewId,
+  setEditingReviewId
+] = useState(null);
+
 
   useEffect(() => {
 
@@ -78,26 +96,51 @@ const [comment, setComment] =
     fetchProduct();
 
   }, []);
-
 const handleReview =
   async () => {
 
     try {
 
-      await createReview({
-        productId: id,
-        rating: Number(rating),
-        comment
-      });
+      if (
+        editingReviewId
+      ) {
+
+        await updateReview(
+          editingReviewId,
+          {
+            rating,
+            comment
+          }
+        );
+
+        alert(
+          "Review Updated"
+        );
+
+      } else {
+
+        await createReview({
+          productId: id,
+          rating: Number(
+            rating
+          ),
+          comment
+        });
+
+        alert(
+          "Review Added"
+        );
+
+      }
 
       setComment("");
       setRating(5);
 
-      fetchReviews();
-
-      alert(
-        "Review added"
+      setEditingReviewId(
+        null
       );
+
+      fetchReviews();
 
     } catch (error) {
 
@@ -117,6 +160,33 @@ const fetchReviews =
         await getReviews(id);
 
       setReviews(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+
+
+  const handleDeleteReview =
+  async (
+    reviewId
+  ) => {
+
+    try {
+
+      await deleteReview(
+        reviewId
+      );
+
+      fetchReviews();
+
+      alert(
+        "Review Deleted"
+      );
 
     } catch (error) {
 
@@ -360,14 +430,16 @@ const handleAddToCart =
   }
   sx={{ mt: 2 }}
 />
-
 <CustomButton
   sx={{ mt: 2 }}
   onClick={handleReview}
 >
-  Submit Review
+  {
+    editingReviewId
+      ? "Update Review"
+      : "Submit Review"
+  }
 </CustomButton>
-
 
 {
   reviews.map(
@@ -383,22 +455,86 @@ const handleAddToCart =
 >
 
 
-        <CardContent>
+<CardContent>
 
-          <Rating
-            value={
+  <Typography
+    variant="subtitle2"
+    color="primary"
+    mb={1}
+  >
+    {
+      review.user?.name
+    }
+  </Typography>
+
+  <Rating
+    value={
+      review.rating
+    }
+    readOnly
+  />
+
+  <Typography
+    sx={{ mt: 1 }}
+  >
+    {
+      review.comment
+    }
+  </Typography>
+
+  {
+    review.user?._id ===
+    user?._id && (
+
+      <Box
+        sx={{
+          mt: 2,
+          display: "flex",
+          gap: 1
+        }}
+      >
+
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => {
+
+            setEditingReviewId(
+              review._id
+            );
+
+            setRating(
               review.rating
-            }
-            readOnly
-          />
+            );
 
-          <Typography>
-            {
+            setComment(
               review.comment
-            }
-          </Typography>
+            );
 
-        </CardContent>
+          }}
+        >
+          Edit
+        </Button>
+
+        <Button
+          variant="outlined"
+          color="error"
+          size="small"
+          onClick={() =>
+            handleDeleteReview(
+              review._id
+            )
+          }
+        >
+          Delete
+        </Button>
+
+      </Box>
+
+    )
+  }
+
+</CardContent>
 
       </Card>
       

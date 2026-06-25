@@ -12,7 +12,8 @@ const authMiddleware = require("../middleware/auth.middleware");
 const validate = require("../middleware/validate.middleware");
 
 const {
-  reviewSchema
+  reviewSchema,
+  updateReviewSchema
 } = require("../validations/review.validation");
 
 const router = express.Router();
@@ -29,7 +30,7 @@ router.post(
 router.put(
   "/:reviewId",
   authMiddleware,
-  validate(reviewSchema),
+  validate(updateReviewSchema),
   updateReview
 );
 
