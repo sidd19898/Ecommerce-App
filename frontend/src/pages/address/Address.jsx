@@ -8,12 +8,15 @@ import {
   Card,
   CardContent,
   Typography,
-  Button
+  Button,
+  Box,
+  Paper
 } from "@mui/material";
 
-import {
-  useNavigate
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import LocationOnOutlinedIcon
+from "@mui/icons-material/LocationOnOutlined";
 
 import {
   getAddresses
@@ -28,8 +31,7 @@ from "../../components/layout/Layout";
 
 export default function Address() {
 
-  const [addresses,
-    setAddresses] =
+  const [addresses, setAddresses] =
     useState([]);
 
   const navigate =
@@ -87,72 +89,140 @@ export default function Address() {
     <Layout>
 
       <Container
-        sx={{ mt: 4 }}
+        maxWidth="md"
+        sx={{ mt: 5, mb: 5 }}
       >
 
         <Typography
           variant="h4"
-          mb={3}
+          fontWeight={700}
+          mb={4}
         >
           Select Address
         </Typography>
 
         {
-          addresses.map(
-            address => (
+          addresses.length === 0 ? (
 
-              <Card
-                key={address._id}
-                sx={{ mb: 2 }}
+            <Paper
+              elevation={4}
+              sx={{
+                p: 6,
+                textAlign: "center",
+                borderRadius: 4
+              }}
+            >
+
+              <LocationOnOutlinedIcon
+                color="primary"
+                sx={{
+                  fontSize: 80,
+                  mb: 2
+                }}
+              />
+
+              <Typography
+                variant="h5"
+                fontWeight={700}
+                gutterBottom
               >
+                No Address Found
+              </Typography>
 
-                <CardContent>
+              <Typography
+                color="text.secondary"
+                sx={{
+                  mb: 4
+                }}
+              >
+                You need to add a delivery
+                address before you can
+                place an order.
+              </Typography>
 
-                  <Typography>
-                    {
-                      address.fullName
-                    }
-                  </Typography>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() =>
+                  navigate(
+                    "/manage-addresses"
+                  )
+                }
+              >
+                Add New Address
+              </Button>
 
-                  <Typography>
-                    {
-                      address.phone
-                    }
-                  </Typography>
+            </Paper>
 
-                  <Typography>
-                    {
-                      address.addressLine1
-                    }
-                  </Typography>
+          ) : (
 
-                  <Typography>
-                    {
-                      address.city
-                    }
-                    ,
-                    {
-                      address.state
-                    }
-                  </Typography>
+            addresses.map(
+              address => (
 
-                  <Button
-                    variant="contained"
-                    sx={{ mt: 2 }}
-                    onClick={() =>
-                      handlePlaceOrder(
-                        address._id
-                      )
-                    }
-                  >
-                    Deliver Here
-                  </Button>
+                <Card
+                  key={address._id}
+                  elevation={3}
+                  sx={{
+                    mb: 3,
+                    borderRadius: 3
+                  }}
+                >
 
-                </CardContent>
+                  <CardContent>
 
-              </Card>
+                    <Typography
+                      variant="h6"
+                      fontWeight={600}
+                    >
+                      {address.fullName}
+                    </Typography>
 
+                    <Typography
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
+                      {address.phone}
+                    </Typography>
+
+                    <Typography>
+                      {address.addressLine1}
+                    </Typography>
+
+                    <Typography>
+                      {address.city},{" "}
+                      {address.state}
+                    </Typography>
+
+                    <Typography>
+                      {address.pincode},{" "}
+                      {address.country}
+                    </Typography>
+
+                    <Box
+                      sx={{ mt: 3 }}
+                    >
+
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() =>
+                          handlePlaceOrder(
+                            address._id
+                          )
+                        }
+                      >
+                        Deliver Here
+                      </Button>
+
+                    </Box>
+
+                  </CardContent>
+
+                </Card>
+
+              )
             )
+
           )
         }
 
