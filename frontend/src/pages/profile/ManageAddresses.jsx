@@ -8,7 +8,8 @@ import {
   Button,
   Card,
   CardContent,
-  Stack
+  Stack,
+  Box
 } from "@mui/material";
 
 import Layout from "../../components/layout/Layout";
@@ -337,27 +338,38 @@ export default function ManageAddresses() {
                       {address.country}
                     </Typography>
 
-                    <Button
-  sx={{ mr: 1 }}
-  onClick={() =>
-    handleEdit(address)
-  }
+<Box
+  sx={{
+    display: "flex",
+    gap: 2,
+    mt: 3
+  }}
 >
-  Edit
-</Button>
+  <Button
+    variant="contained"
+    size="small"
+    onClick={() => handleEdit(address)}
+    sx={{
+      minWidth: 90,
+      borderRadius: 2
+    }}
+  >
+    Edit
+  </Button>
 
-                    <Button
-                      color="error"
-                      sx={{ mt: 2 }}
-                      onClick={() =>
-                        handleDelete(
-                          address._id
-                        )
-                      }
-                    >
-                      Delete
-                    </Button>
-
+  <Button
+    variant="outlined"
+    color="error"
+    size="small"
+    onClick={() => handleDelete(address._id)}
+    sx={{
+      minWidth: 90,
+      borderRadius: 2
+    }}
+  >
+    Delete
+  </Button>
+</Box>
                   </CardContent>
 
                 </Card>
